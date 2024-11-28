@@ -8,6 +8,7 @@ import fs from "fs";
 import mongoose from "mongoose";
 import { Folder } from "./models/folders.model.js";
 import { File } from "./models/files.model.js";
+import bodyParser from "body-parser";
 dotenv.config();
 const app = express();
 app.use(cors(
@@ -17,10 +18,11 @@ app.use(cors(
         allowedHeaders: ['Content-Type', 'Authorization']
     }
 ));
+app.use(bodyParser.json({limit: '100mb'}));
 app.use(express.json(
 
     {
-        limit: '50mb'
+        limit: '100mb'
     }
 ));
 app.use(express.urlencoded({extended: true}))
