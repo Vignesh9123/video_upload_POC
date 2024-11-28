@@ -15,14 +15,14 @@ function App() {
   const [uploading, setUploading] = useState(false)
   const [folderName, setFolderName] = useState(null)
   useEffect(() => {
-    fetch('http://localhost:3000/folders').then(res => res.json()).then(data => {
+    fetch('https://sc-vid-backend.vercel.app/folders').then(res => res.json()).then(data => {
       console.log(data)
       setFolder(data)
     })
   }, [])
 
   const fetchFiles = (id) => {
-    fetch(`http://localhost:3000/files/${id}`).then(res => res.json()).then(data => {
+    fetch(`https://sc-vid-backend.vercel.app/files/${id}`).then(res => res.json()).then(data => {
       console.log(data)
       setFiles(data)
     })
@@ -90,7 +90,7 @@ function App() {
             const formData = new FormData()
             formData.append('file', videoFile)
             formData.append('folderName', folderName)
-            fetch('http://localhost:3000/upload', {
+            fetch('https://sc-vid-backend.vercel.app/upload', {
               method: 'POST',
               body: formData
             }).then(res => res.json()).then(data => {
