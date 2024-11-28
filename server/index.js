@@ -37,7 +37,11 @@ const storage = multer.diskStorage({
     }
 })
 
-const upload = multer({storage: storage});
+const upload = multer({storage: storage,
+    limits: {
+        fileSize: 1024 * 1024 * 100
+    }
+});
 app.get('/', (req, res) => {
     res.send('Hello World!');
 })
