@@ -9,11 +9,16 @@ import mongoose from "mongoose";
 import { Folder } from "./models/folders.model.js";
 import { File } from "./models/files.model.js";
 import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
+import { getAllUsers,registerUser,loginUser,getCurrentUser, logoutUser} from './controllers/user.controller.js';
+import { verifyJWT } from "./middlewares/auth.middleware.js";
+import { frontendURL } from "./constants.js";
 dotenv.config();
 const app = express();
 app.use(cors(
     {
-        origin: '*',
+        origin: frontendURL,
+        credentials: true,
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
         allowedHeaders: ['Content-Type', 'Authorization']
     }
@@ -21,6 +26,7 @@ app.use(cors(
 app.use(bodyParser.json({limit: '100mb'}));
 app.use(bodyParser.urlencoded({limit: '100mb', extended: true}))
 app.use(express.json());
+app.use(cookieParser());
 app.use('/uploads', express.static('uploads'));
 cloudinary.config({ 
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
@@ -91,6 +97,14 @@ app.post('/upload', upload.single('file'), async(req, res) => {
         console.log(err)
     });
 })
+
+//user routes
+
+app.get('/users',getAllUsers);
+app.post('/register', registerUser);
+app.post('/login', loginUser);
+app.get('/current-user', verifyJWT, getCurrentUser);
+app.get('/logout', verifyJWT, logoutUser);
 
 mongoose.connect(
     process.env.MONGO_URI+'/SkillConnectDemo'
